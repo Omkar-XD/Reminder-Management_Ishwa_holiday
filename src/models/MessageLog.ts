@@ -23,7 +23,7 @@ const MessageLogSchema = new mongoose.Schema(
     channel: {
       type: String,
       required: true,
-      enum: ["WhatsApp", "Email", "SMS", "System"],
+      enum: ["WhatsApp", "Email", "SMS", "System", "WhatsApp/Email"],
     },
     status: {
       type: String,

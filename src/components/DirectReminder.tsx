@@ -111,7 +111,21 @@ export default function DirectReminder({ customers, templates, onRefresh, prefil
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ to: cust.phone, message })
             });
+            
             if (res.ok) sentAny = true;
+            
+            // Log WhatsApp attempt
+            await fetch("/api/logs", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  customerName: cust.name,
+                  type: selectedTemplate.name,
+                  channel: "WhatsApp",
+                  status: res.ok ? "Sent" : "Failed",
+                  message: message.substring(0, 100)
+                })
+            });
         }
 
         // Email Transmission
@@ -125,23 +139,24 @@ export default function DirectReminder({ customers, templates, onRefresh, prefil
                 message 
               })
             });
+            
             if (res.ok) sentAny = true;
+
+            // Log Email attempt
+            await fetch("/api/logs", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  customerName: cust.name,
+                  type: selectedTemplate.name,
+                  channel: "Email",
+                  status: res.ok ? "Sent" : "Failed",
+                  message: message.substring(0, 100)
+                })
+            });
         }
 
         if (sentAny) successCount++;
-        
-        // Log the interaction
-        await fetch("/api/logs", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              customerName: cust.name,
-              type: selectedTemplate.name,
-              channel: channel === "whatsapp" ? "WhatsApp" : channel === "email" ? "Email" : "WhatsApp/Email",
-              status: sentAny ? "Sent" : "Failed",
-              message: message.substring(0, 100)
-            })
-        });
 
       } catch (err) {
         console.error("Failed to process reminder for", cust.name, err);

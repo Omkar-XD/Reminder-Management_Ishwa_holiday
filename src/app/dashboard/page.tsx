@@ -313,12 +313,10 @@ export default function Dashboard() {
           {activeTab === "Dashboard" && (() => {
             const now = new Date();
             const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-
-            const todaysMessagesSent = messageLogs.filter(log => {
-                const d = new Date(log.createdAt);
-                return d >= startOfToday && d <= endOfToday;
-            }).length;
+            const todayStr = now.toLocaleDateString();
+            const todaysMessagesSent = messageLogs.filter(log => 
+                new Date(log.createdAt).toLocaleDateString() === todayStr
+            ).length;
 
             // Calculate Admin Policy Alerts once to use in stats and list
             const adminPolicyAlerts: any[] = [];
