@@ -1,45 +1,49 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { 
   FiGrid, FiUsers, FiDatabase, FiFileText, FiSettings, FiLogOut, 
   FiPlus, FiSearch, FiBell, FiChevronRight, FiCalendar, FiClock,
   FiCheckCircle, FiTrash2, FiEdit, FiUpload, FiDownload, FiMessageSquare,
-  FiActivity, FiShield, FiTrendingUp
+  FiActivity, FiShield, FiTrendingUp, FiAlertCircle, FiVolume2, FiSquare, FiFile
 } from "react-icons/fi";
 import { 
-  AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, 
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend 
+  AreaChart, Area, PieChart, Pie, Cell, 
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from "recharts";
+
+// Components
 import TravelersTab from "@/components/TravelersTab";
 import RemindersTab from "@/components/RemindersTab";
 import TemplatesTab from "@/components/TemplatesTab";
 import ReportsTab from "@/components/ReportsTab";
 import SettingsTab from "@/components/SettingsTab";
+import TripManagementTab from "@/components/TripManagementTab";
+import DataImportTab from "@/components/DataImportTab";
+import NotificationsTab from "@/components/NotificationsTab";
+import DocumentsTab from "@/components/DocumentsTab";
+import TeamTab from "@/components/TeamTab";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("Dashboard");
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [authChecked, setAuthChecked] = useState(false);
-  const [reminders, setReminders] = useState([]);
-  const [customers, setCustomers] = useState([]);
-  const [templates, setTemplates] = useState([]);
-  const [messageLogs, setMessageLogs] = useState([]);
+  const [reminders, setReminders] = useState<any[]>([]);
+  const [customers, setCustomers] = useState<any[]>([]);
+  const [templates, setTemplates] = useState<any[]>([]);
+  const [messageLogs, setMessageLogs] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {
-    // Session Hardening
     const handlePageShow = (event: PageTransitionEvent) => {
       if (event.persisted || (typeof window.performance !== 'undefined' && window.performance.navigation.type === 2)) {
         window.location.reload();
       }
     };
     window.addEventListener("pageshow", handlePageShow);
-
     fetchUser();
-
     return () => window.removeEventListener("pageshow", handlePageShow);
   }, []);
 
@@ -130,37 +134,37 @@ export default function Dashboard() {
         }`}
       >
         <span className={`text-xl transition-transform group-hover:scale-110 ${active ? "text-emerald-600" : ""}`}>{icon}</span>
-        <span className={`font-black text-[14px] uppercase tracking-wide ${active ? "text-emerald-900" : ""}`}>{label}</span>
+        <span className={`font-black text-[13px] uppercase tracking-wide whitespace-nowrap ${active ? "text-emerald-900" : ""}`}>{label}</span>
       </div>
     );
   };
 
   const StatsCard = ({ label, value, icon, gradient, iconBg, iconColor, accent }: any) => (
-    <div className={`relative overflow-hidden p-8 rounded-[40px] shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-default ${gradient}`}>
+    <div className={`relative overflow-hidden p-6 rounded-[32px] shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-default ${gradient}`}>
         <div className={`absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-20 blur-3xl ${iconBg}`}></div>
         <div className={`absolute -bottom-10 -left-10 w-32 h-32 rounded-full opacity-10 blur-2xl ${iconBg}`}></div>
 
-        <div className={`relative w-14 h-14 rounded-2xl ${iconBg} flex items-center justify-center mb-6 shadow-xl`}>
-            <div className={`w-7 h-7 ${iconColor}`}>{icon}</div>
+        <div className={`relative w-12 h-12 rounded-2xl ${iconBg} flex items-center justify-center mb-5 shadow-xl`}>
+            <div className={`w-5 h-5 ${iconColor}`}>{icon}</div>
         </div>
 
-        <h3 className="relative text-5xl font-black text-white mb-2 tracking-tighter">{value}</h3>
-        <p className="relative text-white/70 font-black text-[10px] uppercase tracking-[0.2em]">{label}</p>
+        <h3 className="relative text-3xl font-black text-white mb-1 tracking-tighter">{value}</h3>
+        <p className="relative text-white/70 font-black text-[9px] uppercase tracking-[0.2em]">{label}</p>
         
-        <div className={`absolute bottom-0 left-0 right-0 h-[4px] ${accent} opacity-40`}></div>
+        <div className={`absolute bottom-0 left-0 right-0 h-[3px] ${accent} opacity-40 rounded-b-[32px]`}></div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#F1F7F4] flex font-sans overflow-hidden">
-      {/* Sidebar - Matching Kasturi Professional Style */}
-      <div className={`w-72 bg-emerald-900 flex flex-col pt-10 pb-6 transition-all duration-300 relative z-20 shadow-2xl`}>
+    <div className="h-screen w-full bg-[#F1F7F4] flex font-sans overflow-hidden">
+      {/* Sidebar - Exact Kasturi Replica Structure */}
+      <aside className={`w-[300px] h-full bg-emerald-950 flex flex-col pt-10 pb-6 transition-all duration-300 relative z-20 shadow-2xl overflow-y-auto scrollbar-hide shrink-0`}>
         <div className="px-10 mb-14">
           <div className="flex items-center gap-4">
             <div className="relative">
                 <div className="absolute inset-0 bg-emerald-400 blur-md opacity-20 rounded-full animate-pulse"></div>
                 <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-xl relative z-10">
-                  <div className="w-6 h-6 bg-emerald-600 rounded-lg"></div>
+                  <div className="w-7 h-7 bg-emerald-800 rounded-lg"></div>
                 </div>
             </div>
             <div>
@@ -173,207 +177,288 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="flex-1 space-y-2 pl-4 overflow-y-auto custom-scrollbar pr-2">
-          <SidebarLink icon={<FiGrid />} label="Overview" id="Dashboard" />
-          <SidebarLink icon={<FiUsers />} label="Registry" id="Travelers" />
-          <SidebarLink icon={<FiClock />} label="Alerts" id="Reminders" />
-          <SidebarLink icon={<FiDatabase />} label="Library" id="Templates" />
-          <SidebarLink icon={<FiFileText />} label="Audits" id="Reports" />
-          <SidebarLink icon={<FiSettings />} label="Control" id="Settings" />
-        </div>
-
-        <div className="px-6 mt-auto">
-          <div className="p-5 bg-white/5 rounded-[32px] border border-white/5 mb-6 group hover:bg-white/10 transition-all">
-            <p className="text-emerald-400/60 text-[9px] font-black uppercase tracking-widest mb-2">Auth Operator</p>
-            <div className="flex items-center gap-3">
-               <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-[10px] font-black text-white">{user?.email?.[0].toUpperCase()}</div>
-               <p className="text-white font-bold truncate text-xs">{user?.email}</p>
-            </div>
+        <nav className="flex-1 space-y-1 pl-4 pr-2">
+          <SidebarLink icon={<FiGrid />} label="Dashboard" id="Dashboard" />
+          <SidebarLink icon={<FiCalendar />} label="Trip Management" id="Trip Management" />
+          <SidebarLink icon={<FiUsers />} label="Customer Management" id="Customer Management" />
+          <SidebarLink icon={<FiDatabase />} label="Customer Data Import" id="Data Import" />
+          <SidebarLink icon={<FiVolume2 />} label="Reminder Management" id="Reminder Management" />
+          <SidebarLink icon={<FiFileText />} label="Reports" id="Reports" />
+          <SidebarLink icon={<FiSquare />} label="Notification System" id="Notifications" />
+          <SidebarLink icon={<FiMessageSquare />} label="Message Templates" id="Message Templates" />
+          <SidebarLink icon={<FiFile />} label="Documents" id="Documents" />
+          <SidebarLink icon={<FiUsers />} label="Team" id="Team" />
+          <div className="pt-8 border-t border-white/5 mt-8">
+            <SidebarLink icon={<FiSettings />} label="Control Panel" id="Settings" />
           </div>
+        </nav>
+
+        <div className="px-6 mt-10">
           <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-3 px-6 py-5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-[24px] font-black text-sm transition-all group shadow-lg hover:shadow-red-500/20 active:scale-95"
           >
             <FiLogOut className="text-xl group-hover:rotate-12 transition-transform" />
-            <span>TERMINATE</span>
+            <span>LOG OUT</span>
           </button>
         </div>
-      </div>
+      </aside>
 
       {/* Main Content Area */}
       <div className="flex-1 h-screen overflow-y-auto bg-[#F8FAFC]">
-        <header className="sticky top-0 z-10 bg-white/70 backdrop-blur-xl border-b border-emerald-100/30 px-10 py-6 flex justify-between items-center">
+        <header className="sticky top-0 z-10 bg-white/70 backdrop-blur-xl border-b border-emerald-100/30 px-10 py-8 flex justify-between items-center">
           <div className="flex items-center gap-6">
-            <div className="w-1.5 h-10 bg-emerald-500 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.3)]"></div>
+            <div className="w-2 h-12 bg-emerald-600 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.4)]"></div>
             <div>
               <h2 className="text-3xl font-black text-emerald-950 tracking-tight leading-none mb-1.5">{activeTab}</h2>
               <div className="flex items-center gap-2">
                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                 <p className="text-emerald-600/40 text-[10px] font-black uppercase tracking-widest">Ishwa Administrative Terminal</p>
+                 <p className="text-emerald-700/50 text-[11px] font-black uppercase tracking-widest">Ishwa Holidays Administrative Portal</p>
               </div>
             </div>
           </div>
           
           <div className="flex items-center gap-5">
-            <div className="relative group hidden lg:block">
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400 group-focus-within:text-emerald-600 transition-colors" />
-              <input 
-                placeholder="Query system files..." 
-                className="pl-12 pr-6 py-3.5 bg-emerald-50/50 border border-emerald-100 rounded-[20px] text-sm font-bold text-emerald-900 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:bg-white w-80 transition-all border-dashed"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-               <button className="p-4 bg-white border border-emerald-50 text-emerald-600 rounded-[20px] hover:bg-emerald-50 transition-all relative shadow-sm group">
-                 <FiBell className="group-hover:rotate-12 transition-transform" />
-                 <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white shadow-sm animate-bounce"></span>
+             {activeTab === "Reminder Management" && (
+                <button 
+                  onClick={() => {}} // Internal tab will handle this or we can pass a callback
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 px-8 rounded-2xl shadow-lg shadow-emerald-200 transition-all flex items-center gap-3 active:scale-95 text-xs uppercase tracking-widest"
+                >
+                    <FiPlus /> New Reminder
+                </button>
+             )}
+             {activeTab === "Message Templates" && (
+                <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 px-8 rounded-2xl shadow-lg shadow-emerald-200 transition-all flex items-center gap-3 active:scale-95 text-xs uppercase tracking-widest">
+                    <FiPlus /> New Template
+                </button>
+             )}
+            <div className="flex items-center gap-3">
+               <button className="p-4 bg-white border border-emerald-100 text-emerald-800 rounded-[24px] hover:bg-emerald-50 transition-all relative shadow-sm group">
+                 <FiBell className="group-hover:rotate-12 transition-transform text-lg" />
+                 <span className="absolute top-4 right-4 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white shadow-sm animate-bounce"></span>
                </button>
-               <button onClick={loadAllData} className="p-4 bg-white border border-emerald-50 text-emerald-600 rounded-[20px] hover:bg-emerald-50 transition-all shadow-sm group">
-                 <FiActivity className="group-hover:rotate-12 transition-transform" />
+               <button onClick={loadAllData} className="p-4 bg-white border border-emerald-100 text-emerald-800 rounded-[24px] hover:bg-emerald-50 transition-all shadow-sm group">
+                 <FiActivity className="group-hover:rotate-12 transition-transform text-lg" />
                </button>
             </div>
           </div>
         </header>
 
         <main className="p-10">
-          {activeTab === "Dashboard" && (
-            <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              
-              {/* Professional Stats Cards - Kasturi Style with Gradients */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <StatsCard 
-                    label="Active Travelers" 
-                    value={customers.length} 
-                    icon={<FiUsers />} 
+          {activeTab === "Dashboard" && (() => {
+            const now = new Date();
+            const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+            const todaysMessagesSent = messageLogs.filter(log => {
+                const d = new Date(log.createdAt);
+                return d >= startOfToday && d <= endOfToday;
+            }).length;
+
+            const stats = {
+              totalCustomers: customers.length,
+              upcomingReminders: reminders.filter(r => new Date(r.dueDate) > endOfToday && r.status === 'pending').length,
+              todaysReminders: todaysMessagesSent,
+              expiredReminders: reminders.filter(r => r.expiryDate && new Date(r.expiryDate) < startOfToday && r.renewalStatus !== 'Renewed').length,
+              messagesSent: messageLogs.length,
+              renewalSummary: reminders.filter(r => r.renewalStatus === 'Renewed').length
+            };
+
+            const typeData = [
+                { name: "Visa Renewal", value: 45 },
+                { name: "Passport Expiry", value: 32 },
+                { name: "Air Tickets", value: 28 },
+                { name: "Hotel Booking", value: 20 },
+                { name: "Tour Packages", value: 15 },
+                { name: "Travel Insurance", value: 12 }
+            ];
+            const PIE_COLORS = ['#059669', '#7c3aed', '#f97316', '#ef4444', '#3b82f6', '#6366f1'];
+
+            return (
+              <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                
+                {/* 6 Stats Cards - Kasturi Replica */}
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  <StatsCard label="Total Travelers" value={stats.totalCustomers} icon={<FiUsers />}
                     gradient="bg-gradient-to-br from-emerald-600 to-emerald-800"
-                    iconBg="bg-emerald-400/20"
-                    iconColor="text-emerald-100"
-                    accent="bg-emerald-300"
-                />
-                <StatsCard 
-                    label="System Alerts" 
-                    value={reminders.filter((r: any) => r.status === 'pending').length} 
-                    icon={<FiBell />} 
-                    gradient="bg-gradient-to-br from-orange-500 to-orange-700"
-                    iconBg="bg-orange-300/20"
-                    iconColor="text-orange-100"
-                    accent="bg-orange-300"
-                />
-                <StatsCard 
-                    label="Message Library" 
-                    value={templates.length} 
-                    icon={<FiDatabase />} 
-                    gradient="bg-gradient-to-br from-blue-600 to-blue-800"
-                    iconBg="bg-blue-300/20"
-                    iconColor="text-blue-100"
-                    accent="bg-blue-300"
-                />
-                <StatsCard 
-                    label="Audit Stream" 
-                    value={messageLogs.length} 
-                    icon={<FiFileText />} 
-                    gradient="bg-gradient-to-br from-indigo-600 to-indigo-800"
-                    iconBg="bg-indigo-300/20"
-                    iconColor="text-indigo-100"
-                    accent="bg-indigo-300"
-                />
-              </div>
-
-              {/* Data Visualization Sections */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <div className="lg:col-span-2 space-y-10">
-                  <div className="bg-white p-10 rounded-[50px] shadow-sm border border-emerald-50 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full -mr-32 -mt-32 opacity-30 group-hover:scale-110 transition-transform duration-700"></div>
-                    
-                    <div className="flex justify-between items-center mb-10 relative z-10">
-                      <div>
-                        <h4 className="text-2xl font-black text-emerald-950 tracking-tight leading-none mb-2">Network Flux</h4>
-                        <div className="flex items-center gap-2">
-                           <FiTrendingUp className="text-emerald-500" />
-                           <p className="text-emerald-600/40 text-[10px] font-black uppercase tracking-widest">Operational Performance Matrix</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                         {["DAILY", "WEEKLY", "MONTHLY"].map(p => (
-                            <button key={p} className={`px-4 py-2 rounded-xl text-[9px] font-black tracking-widest transition-all ${p === 'WEEKLY' ? 'bg-emerald-600 text-white shadow-lg' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'}`}>{p}</button>
-                         ))}
-                      </div>
-                    </div>
-
-                    <div className="h-[350px] w-full relative z-10">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={[
-                          { name: 'Jan', count: 400 },
-                          { name: 'Feb', count: 300 },
-                          { name: 'Mar', count: 600 },
-                          { name: 'Apr', count: 800 },
-                          { name: 'May', count: 500 },
-                          { name: 'Jun', count: 900 },
-                        ]}>
-                          <defs>
-                            <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#10b981" stopOpacity={0.4}/>
-                              <stop offset="95%" stopColor="#10b981" stopOpacity={0.05}/>
-                            </linearGradient>
-                          </defs>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0fdf4" />
-                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#065f46', fontSize: 10, fontWeight: 900}} dy={15} />
-                          <YAxis axisLine={false} tickLine={false} tick={{fill: '#065f46', fontSize: 10, fontWeight: 900}} />
-                          <Tooltip 
-                            contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.1)', background: 'white', padding: '16px' }}
-                            itemStyle={{ color: '#065f46', fontWeight: 900, fontSize: '12px' }}
-                          />
-                          <Area type="monotone" dataKey="count" stroke="#10b981" strokeWidth={6} fillOpacity={1} fill="url(#colorValue)" />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
+                    iconBg="bg-white/20" iconColor="text-white" accent="bg-emerald-300" />
+                  <StatsCard label="Upcoming Alerts" value={stats.upcomingReminders} icon={<FiClock />}
+                    gradient="bg-gradient-to-br from-violet-600 to-purple-700"
+                    iconBg="bg-white/20" iconColor="text-white" accent="bg-purple-300" />
+                  <StatsCard label="Today's Flux" value={stats.todaysReminders} icon={<FiCalendar />}
+                    gradient="bg-gradient-to-br from-orange-500 to-amber-600"
+                    iconBg="bg-white/20" iconColor="text-white" accent="bg-amber-300" />
+                  <StatsCard label="Critical Risk" value={stats.expiredReminders} icon={<FiAlertCircle />}
+                    gradient="bg-gradient-to-br from-rose-500 to-red-600"
+                    iconBg="bg-white/20" iconColor="text-white" accent="bg-red-300" />
+                  <StatsCard label="Comms Dispatched" value={stats.messagesSent} icon={<FiVolume2 />}
+                    gradient="bg-gradient-to-br from-blue-600 to-indigo-700"
+                    iconBg="bg-white/20" iconColor="text-white" accent="bg-blue-300" />
+                  <StatsCard label="Renewal Node" value={stats.renewalSummary} icon={<FiFileText />}
+                    gradient="bg-gradient-to-br from-indigo-800 to-blue-900"
+                    iconBg="bg-white/20" iconColor="text-white" accent="bg-blue-400" />
                 </div>
 
-                {/* Real-time Activity Feed */}
-                <div className="bg-white p-10 rounded-[50px] shadow-sm border border-emerald-50 h-[525px] flex flex-col">
-                  <div className="flex justify-between items-center mb-10 shrink-0">
-                    <div>
-                        <h4 className="text-2xl font-black text-emerald-950 tracking-tight leading-none mb-1">Live Alerts</h4>
-                        <p className="text-emerald-600/40 text-[9px] font-black uppercase tracking-widest">System Events</p>
-                    </div>
-                    <button onClick={() => setActiveTab("Reminders")} className="w-10 h-10 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all">
-                       <FiChevronRight />
-                    </button>
-                  </div>
+                {/* Charts Row */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                   <div className="lg:col-span-2 bg-white p-10 rounded-[40px] border border-emerald-50 shadow-sm transition-all hover:shadow-xl hover:shadow-emerald-500/5">
+                        <div className="flex justify-between items-center mb-10">
+                            <div>
+                                <h3 className="text-2xl font-black text-emerald-950">Broadcast Activity</h3>
+                                <p className="text-xs text-emerald-400 font-black uppercase tracking-widest mt-1">7-Day Analysis Matrix</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span className="bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-wider">Live System Data</span>
+                            </div>
+                        </div>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <AreaChart data={[
+                                { day: "Mon", Reminders: 12 },
+                                { day: "Tue", Reminders: 18 },
+                                { day: "Wed", Reminders: 15 },
+                                { day: "Thu", Reminders: 25 },
+                                { day: "Fri", Reminders: 22 },
+                                { day: "Sat", Reminders: 30 },
+                                { day: "Sun", Reminders: 28 }
+                            ]}>
+                                <defs>
+                                    <linearGradient id="remGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#059669" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="#059669" stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#f0fdf4" vertical={false} />
+                                <XAxis dataKey="day" stroke="#059669" tick={{ fontSize: 11, fontWeight: 900, fill: '#059669' }} axisLine={false} tickLine={false} dy={10} />
+                                <YAxis stroke="#059669" tick={{ fontSize: 11, fontWeight: 900, fill: '#059669' }} axisLine={false} tickLine={false} />
+                                <Tooltip 
+                                    contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.1)', background: 'white', padding: '16px' }}
+                                    itemStyle={{ color: '#064e3b', fontWeight: 900, fontSize: '12px' }}
+                                />
+                                <Area type="monotone" dataKey="Reminders" stroke="#059669" strokeWidth={5} fill="url(#remGrad)" dot={{ r: 6, fill: '#059669', strokeWidth: 3, stroke: '#fff' }} />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                   </div>
 
-                  <div className="space-y-5 overflow-y-auto custom-scrollbar flex-1 pr-2">
-                    {reminders.length > 0 ? reminders.slice(0, 8).map((rem: any, i) => (
-                      <div key={i} className="flex gap-4 p-5 rounded-[30px] bg-emerald-50/30 border border-emerald-100/50 hover:bg-white hover:shadow-xl hover:shadow-emerald-900/5 transition-all cursor-pointer group">
-                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm shrink-0 transition-transform group-hover:scale-110 ${rem.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
-                          <FiBell size={20} />
+                   <div className="bg-white p-10 rounded-[40px] border border-emerald-50 shadow-sm flex flex-col transition-all hover:shadow-xl hover:shadow-purple-500/5">
+                        <div className="mb-10">
+                            <h3 className="text-2xl font-black text-emerald-950">Category Scope</h3>
+                            <p className="text-xs text-emerald-400 font-black uppercase tracking-widest mt-1">Operational Distribution</p>
                         </div>
-                        <div className="overflow-hidden">
-                          <p className="font-black text-emerald-900 text-sm truncate mb-1">{rem.title}</p>
-                          <div className="flex items-center gap-2">
-                             <FiCalendar className="text-emerald-400" size={10} />
-                             <p className="text-emerald-600/60 text-[9px] font-black uppercase tracking-widest">{new Date(rem.dueDate).toLocaleDateString()}</p>
-                          </div>
+                        <div className="flex-1 flex flex-col justify-center">
+                            <ResponsiveContainer width="100%" height={220}>
+                                <PieChart>
+                                    <Pie data={typeData} cx="50%" cy="50%" innerRadius={60} outerRadius={85} paddingAngle={5} dataKey="value">
+                                        {typeData.map((_, i) => (
+                                            <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} stroke="rgba(255,255,255,0.2)" strokeWidth={2} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                            <div className="mt-8 grid grid-cols-2 gap-3">
+                                {typeData.slice(0, 4).map((entry, i) => (
+                                    <div key={i} className="flex items-center gap-3">
+                                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}></div>
+                                        <span className="text-[10px] font-black text-emerald-950/60 uppercase tracking-tighter">{entry.name}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                      </div>
-                    )) : (
-                      <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
-                         <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6">
-                            <FiBell className="text-emerald-200" size={40} />
-                         </div>
-                         <h5 className="text-emerald-950 font-black text-lg mb-2 tracking-tight">System Silent</h5>
-                         <p className="text-emerald-600/40 text-xs font-bold leading-relaxed">No pending reminders found in the registry.</p>
-                      </div>
-                    )}
-                  </div>
+                   </div>
+                </div>
+
+                {/* Bottom Row: Urgent & Interactions */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="bg-white p-10 rounded-[40px] border border-emerald-50 shadow-sm">
+                        <div className="flex justify-between items-center mb-8">
+                            <h2 className="text-2xl font-black text-emerald-950">Urgent Renewals</h2>
+                            <FiAlertCircle className="text-orange-500 w-6 h-6" />
+                        </div>
+                        <div className="space-y-4">
+                            {reminders.filter(r => r.renewalStatus === 'Pending' || r.renewalStatus === 'In Progress').length > 0 ? (
+                                reminders.filter(r => r.renewalStatus === 'Pending' || r.renewalStatus === 'In Progress').slice(0, 4).map((rem) => (
+                                    <div key={rem._id} className="flex items-center gap-4 p-5 rounded-3xl bg-emerald-50/30 border border-emerald-100/50 hover:bg-white hover:shadow-xl transition-all cursor-pointer group">
+                                        <div className="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-600 transition-transform group-hover:scale-110">
+                                            <FiFileText size={20}/>
+                                        </div>
+                                        <div className="flex-1 overflow-hidden">
+                                            <p className="font-black text-emerald-900 text-sm truncate">{rem.title}</p>
+                                            <p className="text-[10px] text-emerald-400 font-black uppercase tracking-widest">{rem.type} • {rem.renewalStatus}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-[9px] font-black text-emerald-400 uppercase">Alert Node</p>
+                                            <p className="text-xs font-black text-emerald-900">{new Date(rem.dueDate).toLocaleDateString()}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="py-12 flex flex-col items-center text-center">
+                                    <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mb-4">
+                                        <FiShield className="text-emerald-200" size={30} />
+                                    </div>
+                                    <p className="text-emerald-900/40 font-black text-sm uppercase">Registry Clear</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-10 rounded-[40px] border border-emerald-50 shadow-sm">
+                        <div className="flex justify-between items-center mb-8">
+                            <h2 className="text-2xl font-black text-emerald-950">Daily Interactions</h2>
+                            <div className="flex items-center gap-2">
+                                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Live Metadata</span>
+                            </div>
+                        </div>
+                        <div className="space-y-4">
+                            {(() => {
+                                const today = new Date().toLocaleDateString();
+                                const todayLogs = messageLogs.filter(log => new Date(log.createdAt).toLocaleDateString() === today);
+
+                                if (todayLogs.length > 0) {
+                                    return todayLogs.slice(0, 4).map((log) => (
+                                        <div key={log._id} className="group flex items-center gap-4 p-5 rounded-3xl bg-emerald-50/30 border border-emerald-100/50 hover:bg-white hover:shadow-xl transition-all duration-300">
+                                            <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 transition-transform group-hover:scale-110">
+                                                <FiCheckCircle size={20} />
+                                            </div>
+                                            <div className="flex-1 overflow-hidden">
+                                                <p className="font-black text-emerald-900 text-sm truncate">{log.customerName}</p>
+                                                <p className="text-[10px] text-emerald-400 font-black uppercase tracking-widest">{log.type} • {log.channel}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Dispatched</p>
+                                                <p className="text-[11px] font-black text-emerald-900">{new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                            </div>
+                                        </div>
+                                    ));
+                                } else {
+                                    return (
+                                        <div className="py-12 flex flex-col items-center text-center">
+                                            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mb-4 border border-dashed border-emerald-200">
+                                                <FiVolume2 className="text-emerald-200" size={30} />
+                                            </div>
+                                            <p className="text-emerald-900/40 font-black text-sm uppercase italic">Communication node silent</p>
+                                        </div>
+                                    );
+                                }
+                            })()}
+                        </div>
+                    </div>
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
           
-          {activeTab === "Travelers" && <TravelersTab customers={customers} onRefresh={loadAllData} />}
-          {activeTab === "Reminders" && <RemindersTab reminders={reminders} customers={customers} onRefresh={loadAllData} />}
-          {activeTab === "Templates" && <TemplatesTab templates={templates} customers={customers} onRefresh={loadAllData} />}
+          {activeTab === "Trip Management" && <TripManagementTab />}
+          {activeTab === "Customer Management" && <TravelersTab customers={customers} onRefresh={loadAllData} />}
+          {activeTab === "Data Import" && <DataImportTab onRefresh={loadAllData} />}
+          {activeTab === "Reminder Management" && <RemindersTab reminders={reminders} customers={customers} onRefresh={loadAllData} />}
           {activeTab === "Reports" && <ReportsTab logs={messageLogs} reminders={reminders} customers={customers} />}
+          {activeTab === "Notifications" && <NotificationsTab customers={customers} messageLogs={messageLogs} />}
+          {activeTab === "Message Templates" && <TemplatesTab templates={templates} customers={customers} onRefresh={loadAllData} />}
+          {activeTab === "Documents" && <DocumentsTab customers={customers} />}
+          {activeTab === "Team" && <TeamTab />}
           {activeTab === "Settings" && <SettingsTab user={user} />}
         </main>
       </div>

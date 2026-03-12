@@ -33,6 +33,8 @@ export async function POST(req: Request) {
       applicationDate: item["Application Date"],
       applicationNumber: item["Application Number"],
       puneFRO: item["Pune FRO"],
+      passportExpiry: item["Passport Expiry"] || item["P_Expiry"],
+      visaExpiry: item["Visa Expiry"] || item["V_Expiry"],
       status: item["Status"] || "Active",
       remark: item["Remark"],
     }));

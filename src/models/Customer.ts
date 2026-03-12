@@ -66,6 +66,18 @@ const CustomerSchema = new mongoose.Schema(
       type: String,
       default: "Active",
     },
+    travelerType: {
+      type: String,
+      enum: ["Individual", "Company/Org"],
+      default: "Individual",
+    },
+    dob: { type: String },
+    maritalStatus: { type: String },
+    anniversaryDate: { type: String },
+    companyId: { type: String },
+    companyEmail: { type: String },
+    companyContact: { type: String },
+    companyRepresentative: { type: String },
     company: {
       type: String,
       required: true,
