@@ -18,21 +18,8 @@ const TemplateSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: [
-        "Policy Renewal",
-        "Premium Due",
-        "Payment",
-        "Offers",
-        "Birthday",
-        "Anniversary",
-        "Festival",
-        "Custom",
-        "WhatsApp",
-        "Email",
-        "SMS",
-        "General",
-      ],
-      default: "General",
+      enum: ["VISA", "Passport", "Birthday", "Anniversary", "Festivals"],
+      default: "VISA",
     },
     content: {
       type: String,

@@ -11,11 +11,17 @@ export async function PUT(req: Request) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const { ultramsgInstanceId, ultramsgToken } = await req.json();
+    const { 
+      ultramsgInstanceId, ultramsgToken, 
+      smtpHost, smtpPort, smtpUser, smtpPass, fromEmail 
+    } = await req.json();
 
     const user = await User.findByIdAndUpdate(
       decoded.userId,
-      { ultramsgInstanceId, ultramsgToken },
+      { 
+        ultramsgInstanceId, ultramsgToken,
+        smtpHost, smtpPort, smtpUser, smtpPass, fromEmail
+      },
       { new: true }
     );
 

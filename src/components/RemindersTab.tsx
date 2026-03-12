@@ -4,14 +4,17 @@ import { useState } from "react";
 import { 
   FiBell, FiPlus, FiEdit, FiTrash2, FiClock, FiCheck, FiFilter, FiUser, FiAlertCircle, FiCalendar
 } from "react-icons/fi";
+import DirectReminder from "./DirectReminder";
 
 interface RemindersTabProps {
   reminders: any[];
   customers: any[];
+  templates: any[];
   onRefresh: () => void;
+  prefill?: any;
 }
 
-export default function RemindersTab({ reminders, customers, onRefresh }: RemindersTabProps) {
+export default function RemindersTab({ reminders, customers, templates, onRefresh, prefill }: RemindersTabProps) {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -103,36 +106,44 @@ export default function RemindersTab({ reminders, customers, onRefresh }: Remind
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700">
       
+      {/* Send Direct Reminder Section */}
+      <DirectReminder 
+        customers={customers} 
+        templates={templates} 
+        onRefresh={onRefresh} 
+        prefill={prefill}
+      />
+
       {/* Dynamic Summary */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
-            { label: "Active Alerts", val: reminders.filter(r => r.status === 'pending').length, color: "text-emerald-600", bg: "bg-emerald-50", icon: <FiClock /> },
-            { label: "Completed Nodes", val: reminders.filter(r => r.status === 'completed').length, color: "text-blue-600", bg: "bg-blue-50", icon: <FiCheck /> },
+            { label: "Active Alerts", val: reminders.filter(r => r.status === 'pending').length, color: "text-[#0077B6]", bg: "bg-[#CAF0F8]", icon: <FiClock /> },
+            { label: "Completed Nodes", val: reminders.filter(r => r.status === 'completed').length, color: "text-[#03045E]", bg: "bg-[#90E0EF]", icon: <FiCheck /> },
             { label: "Critical Expiry", val: reminders.filter(r => r.type === 'Visa' && r.status === 'pending').length, color: "text-rose-600", bg: "bg-rose-50", icon: <FiAlertCircle /> },
-            { label: "Total Managed", val: reminders.length, color: "text-purple-600", bg: "bg-purple-50", icon: <FiBell /> },
+            { label: "Total Managed", val: reminders.length, color: "text-[#0077B6]", bg: "bg-[#CAF0F8]", icon: <FiBell /> },
         ].map((s, i) => (
-            <div key={i} className="bg-white p-7 rounded-[35px] border border-emerald-50 shadow-sm hover:shadow-xl hover:shadow-emerald-900/5 transition-all group">
+            <div key={i} className="bg-white p-7 rounded-[35px] border border-[#90E0EF] shadow-sm hover:shadow-xl hover:shadow-[#03045E]/5 transition-all group">
                 <div className="flex justify-between items-start mb-4">
                     <div className={`w-12 h-12 rounded-2xl ${s.bg} ${s.color} flex items-center justify-center text-xl shadow-inner group-hover:scale-110 transition-transform`}>
                         {s.icon}
                     </div>
-                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest mt-1">Live Engine</span>
+                    <span className="text-[9px] font-black text-[#0077B6] uppercase tracking-widest mt-1">Live Engine</span>
                 </div>
-                <p className="text-[10px] font-black text-emerald-900/40 uppercase tracking-[0.2em] mb-1">{s.label}</p>
-                <h3 className="text-3xl font-black text-emerald-950">{s.val}</h3>
+                <p className="text-[10px] font-black text-[#03045E]/40 uppercase tracking-[0.2em] mb-1">{s.label}</p>
+                <h3 className="text-3xl font-black text-[#03045E]">{s.val}</h3>
             </div>
         ))}
       </div>
 
       {/* Control Row */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white p-5 rounded-[35px] border border-emerald-50 shadow-sm">
-        <div className="flex bg-emerald-50/50 p-1.5 rounded-2xl border border-emerald-100/50 w-full md:w-auto">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white p-5 rounded-[35px] border border-[#90E0EF] shadow-sm">
+        <div className="flex bg-[#CAF0F8]/50 p-1.5 rounded-2xl border border-[#90E0EF]/50 w-full md:w-auto">
           {["all", "pending", "completed"].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
-                filter === f ? "bg-emerald-600 text-white shadow-xl shadow-emerald-200" : "text-emerald-900/40 hover:emerald-700"
+                filter === f ? "bg-[#03045E] text-white shadow-xl shadow-[#CAF0F8]" : "text-[#03045E]/40 hover:text-[#0077B6]"
               }`}
             >
               {f}
@@ -141,7 +152,7 @@ export default function RemindersTab({ reminders, customers, onRefresh }: Remind
         </div>
         <button
           onClick={() => { resetForm(); setShowModal(true); }}
-          className="w-full md:w-auto flex items-center justify-center gap-3 px-10 py-4 bg-emerald-950 text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl hover:bg-black hover:-translate-y-1 transition-all active:scale-95"
+          className="w-full md:w-auto flex items-center justify-center gap-3 px-10 py-4 bg-[#03045E] text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl hover:bg-black hover:-translate-y-1 transition-all active:scale-95"
         >
           <FiPlus size={16} />
           Protocol Initializer
@@ -151,40 +162,40 @@ export default function RemindersTab({ reminders, customers, onRefresh }: Remind
       {/* Reminders Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredReminders.map((rem: any) => (
-          <div key={rem._id} className="bg-white p-8 rounded-[50px] shadow-sm border border-emerald-50 hover:shadow-2xl hover:shadow-emerald-100/30 transition-all group relative overflow-hidden flex flex-col h-[420px]">
+          <div key={rem._id} className="bg-white p-8 rounded-[50px] shadow-sm border border-[#90E0EF] hover:shadow-2xl hover:shadow-[#CAF0F8]/30 transition-all group relative overflow-hidden flex flex-col h-[420px]">
             {/* Background Aesthetic */}
-            <div className={`absolute -bottom-10 -right-10 w-40 h-40 rounded-full opacity-5 blur-3xl ${rem.status === 'completed' ? 'bg-emerald-500' : 'bg-orange-500'}`}></div>
+            <div className={`absolute -bottom-10 -right-10 w-40 h-40 rounded-full opacity-5 blur-3xl ${rem.status === 'completed' ? 'bg-[#0077B6]' : 'bg-[#00B4D8]'}`}></div>
             
             <div className="flex justify-between items-start mb-8 relative z-10">
                 <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
-                    rem.status === 'completed' ? 'bg-emerald-100 text-emerald-600' : 'bg-orange-100 text-orange-600'
+                    rem.status === 'completed' ? 'bg-[#CAF0F8] text-[#03045E]' : 'bg-[#90E0EF] text-[#0077B6]'
                 }`}>
                   {rem.status} Node
                 </span>
                 <div className="flex gap-2">
-                    <button onClick={() => handleEdit(rem)} className="w-10 h-10 flex items-center justify-center text-emerald-400 hover:text-emerald-900 bg-emerald-50 rounded-xl transition-all"><FiEdit size={16}/></button>
+                    <button onClick={() => handleEdit(rem)} className="w-10 h-10 flex items-center justify-center text-[#00B4D8] hover:text-[#03045E] bg-[#CAF0F8] rounded-xl transition-all"><FiEdit size={16}/></button>
                     <button onClick={() => handleDelete(rem._id)} className="w-10 h-10 flex items-center justify-center text-red-300 hover:text-red-600 bg-red-50 rounded-xl transition-all"><FiTrash2 size={16}/></button>
                 </div>
             </div>
 
             <div className="flex-1 relative z-10">
                 <div className="flex items-center gap-2 mb-3">
-                    <div className="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
-                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">{rem.type} Classification</span>
+                    <div className="w-1.5 h-6 bg-[#00B4D8] rounded-full"></div>
+                    <span className="text-[10px] font-black text-[#00B4D8] uppercase tracking-[0.2em]">{rem.type} Classification</span>
                 </div>
-                <h4 className="text-2xl font-black text-emerald-950 leading-tight mb-4 group-hover:text-emerald-600 transition-colors uppercase h-14 overflow-hidden">{rem.title}</h4>
-                <p className="text-emerald-600/60 font-medium text-sm leading-relaxed line-clamp-3 italic">"{rem.description || 'No specific metadata inscribed for this automated alert.'}"</p>
+                <h4 className="text-2xl font-black text-[#03045E] leading-tight mb-4 group-hover:text-[#0077B6] transition-colors uppercase h-14 overflow-hidden">{rem.title}</h4>
+                <p className="text-[#03045E]/60 font-medium text-sm leading-relaxed line-clamp-3 italic">"{rem.description || 'No specific metadata inscribed for this automated alert.'}"</p>
             </div>
 
-            <div className="mt-8 pt-8 border-t border-emerald-50 relative z-10">
+            <div className="mt-8 pt-8 border-t border-[#90E0EF] relative z-10">
                  <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
+                        <div className="w-10 h-10 bg-[#CAF0F8] rounded-xl flex items-center justify-center text-[#03045E]">
                             <FiCalendar size={18} />
                         </div>
                         <div>
-                            <p className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Temporal Node</p>
-                            <p className="text-sm font-black text-emerald-950">{new Date(rem.dueDate).toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                            <p className="text-[9px] font-black text-[#0077B6] uppercase tracking-widest">Temporal Node</p>
+                            <p className="text-sm font-black text-[#03045E]">{new Date(rem.dueDate).toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                         </div>
                     </div>
                  </div>
@@ -194,16 +205,16 @@ export default function RemindersTab({ reminders, customers, onRefresh }: Remind
                         onClick={() => handleToggleStatus(rem)}
                         className={`flex-1 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all active:scale-95 shadow-lg ${
                         rem.status === 'completed' 
-                            ? 'bg-emerald-50 text-emerald-700 shadow-emerald-50 border border-emerald-100' 
-                            : 'bg-emerald-950 text-white shadow-emerald-900/10'
+                            ? 'bg-[#CAF0F8] text-[#03045E] shadow-[#CAF0F8] border border-[#90E0EF]' 
+                            : 'bg-[#03045E] text-white shadow-[#03045E]/10'
                         }`}
                     >
                         {rem.status === 'completed' ? 'Re-Initialize' : 'Commit Completion'}
                     </button>
                     {rem.customerId && (
-                        <div className="px-5 py-4 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 group/tt relative">
+                        <div className="px-5 py-4 bg-[#CAF0F8] rounded-2xl flex items-center justify-center text-[#03045E] group/tt relative">
                             <FiUser size={18} />
-                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-4 py-2 bg-emerald-900 text-white text-[9px] font-black rounded-lg opacity-0 group-hover/tt:opacity-100 transition-all pointer-events-none whitespace-nowrap shadow-xl">
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-4 py-2 bg-[#03045E] text-white text-[9px] font-black rounded-lg opacity-0 group-hover/tt:opacity-100 transition-all pointer-events-none whitespace-nowrap shadow-xl">
                                 {customers.find(c => c._id === rem.customerId)?.name || 'Traveler'}
                             </div>
                         </div>
@@ -213,12 +224,12 @@ export default function RemindersTab({ reminders, customers, onRefresh }: Remind
           </div>
         ))}
         {filteredReminders.length === 0 && (
-          <div className="col-span-full py-24 text-center bg-white rounded-[50px] border border-emerald-100 shadow-inner">
-             <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-100 border border-dashed border-emerald-200">
+          <div className="col-span-full py-24 text-center bg-white rounded-[50px] border border-[#90E0EF] shadow-inner">
+             <div className="w-24 h-24 bg-[#CAF0F8] rounded-full flex items-center justify-center mx-auto mb-6 text-[#90E0EF] border border-dashed border-[#00B4D8]">
                 <FiBell size={48} />
              </div>
-             <h4 className="text-xl font-black text-emerald-950 mb-2 uppercase tracking-tighter">Alert Registry Empty</h4>
-             <p className="text-emerald-600/40 text-xs font-black uppercase tracking-widest">No service protocols currently active</p>
+             <h4 className="text-xl font-black text-[#03045E] mb-2 uppercase tracking-tighter">Alert Registry Empty</h4>
+             <p className="text-[#03045E]/40 text-xs font-black uppercase tracking-widest">No service protocols currently active</p>
           </div>
         )}
       </div>
@@ -226,12 +237,12 @@ export default function RemindersTab({ reminders, customers, onRefresh }: Remind
       {/* Ingestion Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-emerald-950/20 backdrop-blur-md" onClick={() => setShowModal(false)} />
+          <div className="absolute inset-0 bg-[#03045E]/20 backdrop-blur-md" onClick={() => setShowModal(false)} />
           <div className="relative w-full max-w-lg bg-white rounded-[50px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-            <div className="p-10 bg-emerald-950 text-white flex justify-between items-center">
+            <div className="p-10 bg-[#03045E] text-white flex justify-between items-center">
               <div>
                 <h3 className="text-2xl font-black uppercase tracking-tighter">{isEditing ? "Modify Alert node" : "New protocol"}</h3>
-                <p className="text-emerald-400 text-[10px] font-black uppercase tracking-widest mt-1">Managed Information Center</p>
+                <p className="text-[#00B4D8] text-[10px] font-black uppercase tracking-widest mt-1">Managed Information Center</p>
               </div>
               <button onClick={() => setShowModal(false)} className="w-12 h-12 bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-all flex items-center justify-center">
                  <FiPlus className="rotate-45" size={24} />
@@ -239,17 +250,17 @@ export default function RemindersTab({ reminders, customers, onRefresh }: Remind
             </div>
             <form onSubmit={handleSubmit} className="p-10 space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-emerald-700/50 uppercase ml-2 tracking-[0.2em]">Title Node</label>
-                <input name="title" value={formData.title} onChange={handleInputChange} required placeholder="Identification string..." className="w-full px-6 py-4 bg-emerald-50/50 border border-emerald-100 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 focus:bg-white transition-all text-emerald-900 font-bold" />
+                <label className="text-[10px] font-black text-[#03045E]/50 uppercase ml-2 tracking-[0.2em]">Title Node</label>
+                <input name="title" value={formData.title} onChange={handleInputChange} required placeholder="Identification string..." className="w-full px-6 py-4 bg-[#CAF0F8]/50 border border-[#90E0EF] rounded-3xl outline-none focus:ring-4 focus:ring-[#00B4D8]/10 focus:bg-white transition-all text-[#03045E] font-bold" />
               </div>
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-emerald-700/50 uppercase ml-2 tracking-[0.2em]">Temporal Node</label>
-                  <input type="date" name="dueDate" value={formData.dueDate} onChange={handleInputChange} required className="w-full px-6 py-4 bg-emerald-50/50 border border-emerald-100 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 focus:bg-white transition-all text-emerald-900 font-bold" />
+                  <label className="text-[10px] font-black text-[#03045E]/50 uppercase ml-2 tracking-[0.2em]">Temporal Node</label>
+                  <input type="date" name="dueDate" value={formData.dueDate} onChange={handleInputChange} required className="w-full px-6 py-4 bg-[#CAF0F8]/50 border border-[#90E0EF] rounded-3xl outline-none focus:ring-4 focus:ring-[#00B4D8]/10 focus:bg-white transition-all text-[#03045E] font-bold" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-emerald-700/50 uppercase ml-2 tracking-[0.2em]">Classification</label>
-                  <select name="type" value={formData.type} onChange={handleInputChange} className="w-full px-6 py-4 bg-emerald-50/50 border border-emerald-100 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 focus:bg-white transition-all text-emerald-900 font-bold appearance-none">
+                  <label className="text-[10px] font-black text-[#03045E]/50 uppercase ml-2 tracking-[0.2em]">Classification</label>
+                  <select name="type" value={formData.type} onChange={handleInputChange} className="w-full px-6 py-4 bg-[#CAF0F8]/50 border border-[#90E0EF] rounded-3xl outline-none focus:ring-4 focus:ring-[#00B4D8]/10 focus:bg-white transition-all text-[#03045E] font-bold appearance-none">
                     <option>Visa</option>
                     <option>Passport</option>
                     <option>Payment</option>
@@ -259,17 +270,17 @@ export default function RemindersTab({ reminders, customers, onRefresh }: Remind
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-emerald-700/50 uppercase ml-2 tracking-[0.2em]">Associate Traveler</label>
-                <select name="customerId" value={formData.customerId} onChange={handleInputChange} className="w-full px-6 py-4 bg-emerald-50/50 border border-emerald-100 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 focus:bg-white transition-all text-emerald-900 font-bold appearance-none">
+                <label className="text-[10px] font-black text-[#03045E]/50 uppercase ml-2 tracking-[0.2em]">Associate Traveler</label>
+                <select name="customerId" value={formData.customerId} onChange={handleInputChange} className="w-full px-6 py-4 bg-[#CAF0F8]/50 border border-[#90E0EF] rounded-3xl outline-none focus:ring-4 focus:ring-[#00B4D8]/10 focus:bg-white transition-all text-[#03045E] font-bold appearance-none">
                   <option value="">None Selected</option>
                   {customers.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-emerald-700/50 uppercase ml-2 tracking-[0.2em]">Inscribed Metadata</label>
-                <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder="Additional context..." className="w-full px-6 py-4 bg-emerald-50/50 border border-emerald-100 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 focus:bg-white transition-all text-emerald-900 font-bold h-24 resize-none" />
+                <label className="text-[10px] font-black text-[#03045E]/50 uppercase ml-2 tracking-[0.2em]">Inscribed Metadata</label>
+                <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder="Additional context..." className="w-full px-6 py-4 bg-[#CAF0F8]/50 border border-[#90E0EF] rounded-3xl outline-none focus:ring-4 focus:ring-[#00B4D8]/10 focus:bg-white transition-all text-[#03045E] font-bold h-24 resize-none" />
               </div>
-              <button type="submit" className="w-full py-5 bg-emerald-600 text-white font-black rounded-3xl shadow-2xl shadow-emerald-200 hover:bg-emerald-700 hover:-translate-y-1 transition-all active:scale-95 text-xs uppercase tracking-[0.2em]">
+              <button type="submit" className="w-full py-5 bg-[#0077B6] text-white font-black rounded-3xl shadow-2xl shadow-[#CAF0F8] hover:bg-[#03045E] hover:-translate-y-1 transition-all active:scale-95 text-xs uppercase tracking-[0.2em]">
                 {isEditing ? "Update protocol" : "Commit to Registry"}
               </button>
             </form>

@@ -24,6 +24,11 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    smtpHost: { type: String, default: "" },
+    smtpPort: { type: String, default: "587" },
+    smtpUser: { type: String, default: "" },
+    smtpPass: { type: String, default: "" },
+    fromEmail: { type: String, default: "" },
   },
   { timestamps: true }
 );

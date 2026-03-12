@@ -7,84 +7,52 @@ const CustomerSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
-    gender: {
-      type: String,
-    },
-    studentId: {
-      type: String,
-    },
-    passportNo: {
-      type: String,
-    },
-    visaNo: {
-      type: String,
-    },
-    passportExpiry: {
-      type: String,
-    },
-    visaExpiry: {
-      type: String,
-    },
-    companyName: {
-      type: String,
-    },
-    pwd1: {
-      type: String,
-    },
-    userIdExcel: {
-      type: String,
-    },
-    pwd2: {
-      type: String,
-    },
-    work: {
-      type: String,
-    },
-    applicationDate: {
-      type: String,
-    },
-    applicationNumber: {
-      type: String,
-    },
-    puneFRO: {
-      type: String,
-    },
-    remark: {
-      type: String,
-    },
-    status: {
-      type: String,
-      default: "Active",
-    },
     travelerType: {
       type: String,
       enum: ["Individual", "Company/Org"],
       default: "Individual",
     },
+    name: {
+      type: String,
+      required: true,
+    },
     dob: { type: String },
+    email: { type: String },
+    phone: { type: String },
+    gender: { type: String },
+    studentId: { type: String }, // Used as Document ID
     maritalStatus: { type: String },
-    anniversaryDate: { type: String },
+    passportNo: { type: String },
+    passportExpiry: { type: String },
+    visaNo: { type: String },
+    visaExpiry: { type: String },
+    companyName: { type: String },
     companyId: { type: String },
     companyEmail: { type: String },
     companyContact: { type: String },
     companyRepresentative: { type: String },
+    status: {
+      type: String,
+      default: "Active",
+    },
     company: {
       type: String,
       required: true,
       default: "Ishwa Holidays",
     },
+    anniversaryDate: { type: String },
+    documents: [
+      {
+        name: String,
+        type: String, // e.g., Passport, VISA, Ticket
+        url: String,  // Local path or URL
+        fileType: String, // e.g., pdf, png
+        uploadedAt: { type: Date, default: Date.now }
+      }
+    ],
   },
   { timestamps: true }
 );
 
 export default mongoose.models.Customer || mongoose.model("Customer", CustomerSchema);
+
