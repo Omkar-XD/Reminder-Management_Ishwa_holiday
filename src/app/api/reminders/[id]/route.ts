@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Reminder from "@/models/Reminder";
 import { getAuthUser } from "@/lib/auth";
+import { sendWhatsAppMessage } from "@/lib/whatsapp";
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -15,10 +16,36 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       { _id: id, userId: user.userId },
       body,
       { new: true }
-    );
+    ).populate("customerId");
 
     if (!updatedReminder) {
       return NextResponse.json({ message: "Reminder not found" }, { status: 404 });
+    }
+
+    // Check if it should be sent immediately after update
+    const now = new Date();
+    if (new Date(updatedReminder.dueDate) <= now && !updatedReminder.whatsappSent) {
+      let recipientPhone = updatedReminder.phoneNumber;
+
+      if (!recipientPhone && updatedReminder.customerId) {
+        recipientPhone = (updatedReminder.customerId as any).phone;
+      }
+
+      if (recipientPhone) {
+        const templateName = process.env.WHATSAPP_TEMPLATE_NAME || "reminder_template";
+        const variables = [
+          updatedReminder.title,
+          updatedReminder.type,
+          new Date(updatedReminder.dueDate).toLocaleDateString(),
+        ];
+
+        const sendResult = await sendWhatsAppMessage(recipientPhone, templateName, variables);
+
+        if (sendResult.success) {
+          updatedReminder.whatsappSent = true;
+          await updatedReminder.save();
+        }
+      }
     }
 
     return NextResponse.json(updatedReminder);

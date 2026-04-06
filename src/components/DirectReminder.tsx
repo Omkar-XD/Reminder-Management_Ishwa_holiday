@@ -106,7 +106,7 @@ export default function DirectReminder({ customers, templates, onRefresh, prefil
         
         // WhatsApp Transmission
         if ((channel === "whatsapp" || channel === "both") && cust.phone) {
-            const res = await fetch("/api/ultramsg", {
+            const res = await fetch("/api/infobip/direct", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ to: cust.phone, message })

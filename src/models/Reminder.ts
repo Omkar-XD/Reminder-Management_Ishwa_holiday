@@ -54,6 +54,13 @@ const ReminderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customer",
     },
+    whatsappSent: {
+      type: Boolean,
+      default: false,
+    },
+    phoneNumber: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
